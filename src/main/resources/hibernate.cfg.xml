@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/foodhub_db</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">RmrOW822wj@982</property>
+
+        <!-- JDBC connection pool settings -->
+        <property name="hibernate.connection.pool_size">10</property>
+
+        <!-- SQL dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+
+        <!-- Drop and re-create the database schema on startup -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Mapping classes -->
+        <mapping class="com.foodhub.model.Customer"/>
+        <mapping class="com.foodhub.model.MenuItem"/>
+        <mapping class="com.foodhub.model.Order"/>
+        <mapping class="com.foodhub.model.OrderItem"/>
+    </session-factory>
+</hibernate-configuration>
