@@ -2,6 +2,8 @@ package com.foodhub.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "menu_items")
 public class MenuItem {
@@ -17,7 +19,7 @@ public class MenuItem {
     private String description;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private double price;
+    private BigDecimal price;
 
     @Column(nullable = false, length = 45)
     private String category;
@@ -30,7 +32,7 @@ public class MenuItem {
 
     public MenuItem() {}
 
-    public MenuItem(int id, String name, String description, double price, String category, boolean available, String imageUrl) {
+    public MenuItem(int id, String name, String description, BigDecimal price, String category, boolean available, String imageUrl) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -54,11 +56,11 @@ public class MenuItem {
         this.category = category;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

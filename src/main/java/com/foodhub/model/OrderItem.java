@@ -2,6 +2,8 @@ package com.foodhub.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "order_items")
 public class OrderItem {
@@ -10,25 +12,25 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "order_id", nullable = false)
+    @Column(name = "orders_id", nullable = false)
     private int orderId;
 
-    @Column(name = "menu_item_id", nullable = false)
+    @Column(name = "menu_items_id", nullable = false)
     private int menuItemId;
 
     @Column(nullable = false)
     private int quantity;
 
     @Column(name = "unit_price", nullable = false, precision = 10, scale = 2)
-    private double unitPrice;
+    private BigDecimal unitPrice;
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private double subtotal;
+    @Column(name = "sub_total", nullable = false, precision = 10, scale = 2)
+    private BigDecimal subtotal;
 
     // Constructors
     public OrderItem() {}
 
-    public OrderItem(int orderId, int menuItemId, int quantity, double unitPrice, double subtotal) {
+    public OrderItem(int orderId, int menuItemId, int quantity, BigDecimal unitPrice, BigDecimal subtotal) {
         this.orderId = orderId;
         this.menuItemId = menuItemId;
         this.quantity = quantity;
@@ -49,9 +51,9 @@ public class OrderItem {
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public double getUnitPrice() { return unitPrice; }
-    public void setUnitPrice(double unitPrice) { this.unitPrice = unitPrice; }
+    public BigDecimal getUnitPrice() { return unitPrice; }
+    public void setUnitPrice(BigDecimal unitPrice) { this.unitPrice = unitPrice; }
 
-    public double getSubtotal() { return subtotal; }
-    public void setSubtotal(double subtotal) { this.subtotal = subtotal; }
+    public BigDecimal getSubtotal() { return subtotal; }
+    public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
 }

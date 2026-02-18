@@ -9,6 +9,7 @@ import com.foodhub.model.Order;
 import com.foodhub.model.OrderItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -16,6 +17,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -34,7 +36,7 @@ public class RestServer {
     private static final OrderDAO orderDAO = new OrderDAO();
 
     public static void main(String[] args) throws IOException {
-        // Create server on all network interfaces (0.0.0.0) instead of localhost
+        // Create server
         HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", 8080), 0);
 
         System.out.println("===========================================");
@@ -75,24 +77,18 @@ public class RestServer {
         System.out.println("===========================================");
     }
 
-    // ============================================
-    // HELPER METHODS
-    // ============================================
 
-    /**
-     * Add CORS headers to response
-     * This is CRITICAL for React Native to communicate with backend
-     */
     private static void addCORSHeaders(HttpExchange exchange) {
+        Headers headers = exchange.getResponseHeaders();
         exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
         exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
         exchange.getResponseHeaders().set("Access-Control-Max-Age", "3600");
     }
 
-    /**
-     * Send JSON response to client
-     */
+
+//     Send JSON response to client
+
     private static void sendJsonResponse(HttpExchange exchange, int statusCode, Object data) throws IOException {
         // Add CORS headers
         addCORSHeaders(exchange);
@@ -114,18 +110,18 @@ public class RestServer {
                 statusCode);
     }
 
-    /**
-     * Read request body as String
-     */
+
+//     Read request body as String
+
     private static String readRequestBody(HttpExchange exchange) throws IOException {
         try (InputStream is = exchange.getRequestBody()) {
             return new String(is.readAllBytes(), StandardCharsets.UTF_8);
         }
     }
 
-    /**
-     * Handle OPTIONS preflight requests (CORS)
-     */
+
+//     Handle OPTIONS preflight requests (CORS)
+
     private static boolean handleCORSPreflight(HttpExchange exchange) throws IOException {
         if ("OPTIONS".equals(exchange.getRequestMethod())) {
             addCORSHeaders(exchange);
@@ -135,10 +131,7 @@ public class RestServer {
         return false;
     }
 
-    // ============================================
     // TEST HANDLER (for connection testing)
-    // ============================================
-
     static class TestHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -158,9 +151,7 @@ public class RestServer {
         }
     }
 
-    // ============================================
     // MENU HANDLERS
-    // ============================================
 
     static class MenuHandler implements HttpHandler {
         @Override
@@ -227,9 +218,7 @@ public class RestServer {
         }
     }
 
-    // ============================================
     // CUSTOMER HANDLERS
-    // ============================================
 
     static class CustomerHandler implements HttpHandler {
         @Override
@@ -308,9 +297,7 @@ public class RestServer {
         }
     }
 
-    // ============================================
     // ORDER HANDLERS
-    // ============================================
 
     static class OrderHandler implements HttpHandler {
         @Override
@@ -340,7 +327,10 @@ public class RestServer {
                     Order order = new Order();
                     order.setCustomerId(((Double) orderData.get("customerId")).intValue());
                     order.setOrderDate(new Date());
-                    order.setTotalAmount((Double) orderData.get("totalAmount"));
+//                    order.setTotalAmount((BigDecimal) orderData.get("totalAmount"));
+                    order.setTotalAmount(
+                            BigDecimal.valueOf(((Number) orderData.get("totalAmount")).doubleValue())
+                    );
                     order.setStatus("PENDING");
                     order.setDeliveryAddress((String) orderData.get("deliveryAddress"));
 
@@ -354,8 +344,16 @@ public class RestServer {
                             orderItem.setOrderId(orderId);
                             orderItem.setMenuItemId(((Double) item.get("menuItemId")).intValue());
                             orderItem.setQuantity(((Double) item.get("quantity")).intValue());
-                            orderItem.setUnitPrice((Double) item.get("unitPrice"));
-                            orderItem.setSubtotal((Double) item.get("subtotal"));
+//                            orderItem.setUnitPrice((BigDecimal) item.get("unitPrice"));
+//                            orderItem.setSubtotal((BigDecimal) item.get("subtotal"));
+
+                            orderItem.setUnitPrice(
+                                    BigDecimal.valueOf(((Number) item.get("unitPrice")).doubleValue())
+                            );
+
+                            orderItem.setSubtotal(
+                                    BigDecimal.valueOf(((Number) item.get("subtotal")).doubleValue())
+                            );
 
                             orderDAO.addOrderItem(orderItem);
                         }

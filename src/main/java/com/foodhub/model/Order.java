@@ -1,6 +1,8 @@
 package com.foodhub.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -11,7 +13,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "customer_id", nullable = false)
+    @Column(name = "customers_id", nullable = false)
     private int customerId;
 
     @Column(name = "order_date", nullable = false)
@@ -19,7 +21,7 @@ public class Order {
     private Date orderDate;
 
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
-    private double totalAmount;
+    private BigDecimal totalAmount;
 
     @Column(length = 20)
     private String status;
@@ -29,7 +31,7 @@ public class Order {
 
     public Order() {}
 
-    public Order(int customerId, Date orderDate, double totalAmount, String status, String deliveryAddress) {
+    public Order(int customerId, Date orderDate, BigDecimal totalAmount, String status, String deliveryAddress) {
         this.customerId = customerId;
         this.orderDate = orderDate;
         this.totalAmount = totalAmount;
@@ -47,8 +49,8 @@ public class Order {
     public Date getOrderDate() { return orderDate; }
     public void setOrderDate(Date orderDate) { this.orderDate = orderDate; }
 
-    public double getTotalAmount() { return totalAmount; }
-    public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
+    public BigDecimal getTotalAmount() { return totalAmount; }
+    public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

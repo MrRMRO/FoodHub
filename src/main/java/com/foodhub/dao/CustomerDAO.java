@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.Date;
 import java.util.List;
 
 public class CustomerDAO {
@@ -37,19 +38,33 @@ public class CustomerDAO {
     // Add new customer
     public int addCustomer(Customer customer) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
+
+            customer.setCreatedDate(new Date());
+
             int id = (Integer) session.save(customer);
+
             transaction.commit();
             return id;
+
         } catch (Exception e) {
-            if (transaction != null) {
+            if (transaction != null && transaction.getStatus().canRollback()) {
                 transaction.rollback();
             }
             e.printStackTrace();
             return -1;
+
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
+
 
     // Update customer
     public boolean updateCustomer(Customer customer) {

@@ -16,7 +16,7 @@ public class Customer {
     private String name;
 
     @Column(nullable = false, length = 45)
-    private String mobile;
+    private String phone;
 
     @Column(length = 45)
     private String email;
@@ -47,12 +47,12 @@ public class Customer {
         this.name = name;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getAddress() {
@@ -79,9 +79,9 @@ public class Customer {
         this.createdDate = createdDate;
     }
 
-    public Customer(int id, String name, String mobile, String email, String address, Date createdDate) {
+    public Customer(int id, String name, String phone, String email, String address, Date createdDate) {
         this.name = name;
-        this.mobile = mobile;
+        this.phone = phone;
         this.email = email;
         this.address = address;
         this.createdDate = createdDate;
